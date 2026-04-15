@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — WatchMechanic TimeZone Converter</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; color: #333; line-height: 1.7; }
+        h1 { font-size: 1.6em; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { font-size: 1.2em; margin-top: 30px; }
+        p { margin: 10px 0; }
+        .date { color: #888; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    <p><strong>WatchMechanic — TimeZone Converter</strong></p>
+    <p class="date">Last updated: March 28, 2026</p>
+
+    <h2>Data Collection</h2>
+    <p>This extension does <strong>not</strong> collect, store, or transmit any personal data, browsing history, or usage analytics. No data is sent to any server or third party.</p>
+
+    <h2>Local Storage</h2>
+    <p>The extension uses Chrome's built-in <code>chrome.storage.sync</code> API solely to save your timezone preferences (selected timezones, display format, toggle states). This data stays within your Chrome profile and is never accessed by the developer or any external service.</p>
+
+    <h2>Permissions</h2>
+    <ul>
+        <li><strong>storage</strong> — Used to save and sync your timezone preferences across your Chrome devices.</li>
+        <li><strong>contextMenus</strong> — Used to add a "Convert timestamp" option when you right-click selected text.</li>
+        <li><strong>Content script (all URLs)</strong> — Required for the double-click timestamp detection feature to work on any webpage. The content script only reads text you double-click; it does not read, scan, or transmit any other page content.</li>
+    </ul>
+
+    <h2>Network Requests</h2>
+    <p>This extension makes <strong>zero</strong> network requests. It operates entirely offline. All timezone conversions are computed locally using JavaScript's built-in <code>Intl.DateTimeFormat</code> API.</p>
+
+    <h2>Third-Party Services</h2>
+    <p>This extension does not use any third-party services, analytics tools, tracking pixels, or advertising frameworks.</p>
+
+    <h2>Changes to This Policy</h2>
+    <p>If this policy is updated, the changes will be reflected on this page with an updated date.</p>
+
+    <h2>Contact</h2>
+    <p>For questions about this privacy policy, contact the developer through the Chrome Web Store listing.</p>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Zone Converter Pro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🌍 Time Zone Converter</h1>
+            <button id="open-settings" class="settings-btn" title="Settings">⚙️</button>
+        </header>
+
+        <!-- Current Times Section -->
+        <section class="current-time-section">
+            <h2>🕐 Current Unix Timestamp</h2>
+            <div class="epoch-display">
+                <button id="copy-live-epoch" class="epoch-copy-btn"></button>
+                <div class="epoch-value" id="live-epoch-millis">0</div>
+                <div class="epoch-label">Seconds: <span id="live-epoch-seconds">0</span></div>
+            </div>
+            
+            <h2>Current Time</h2>
+            <div class="time-display-grid"></div>
+        </section>
+
+        <!-- Unix Timestamp Converter -->
+        <section class="converter-section">
+            <h2>🔢 Unix Timestamp Converter</h2>
+            <p class="section-desc">Paste any number to convert</p>
+
+            <div class="input-group">
+                <input type="text" id="timestamp-input" placeholder="e.g., 1737194785432 or 1737194785">
+                <button id="convert-timestamp-ms" class="convert-ms-btn">Convert ms</button>
+                <button id="convert-timestamp-sec" class="convert-sec-btn">Convert sec</button>
+            </div>
+
+            <!-- Timestamp Conversion Results -->
+            <div id="timestamp-conversion-results" style="display: none;">
+                <h3>Converted Times</h3>
+                <div class="timestamp-result-grid"></div>
+            </div>
+        </section>
+
+        <!-- Time Zone Converter -->
+        <section class="converter-section">
+            <h2>🔄 Time Zone Converter</h2>
+            <p class="section-desc">Convert a specific time to other timezones</p>
+            
+            <div class="input-row">
+                <label for="input-timezone">From Timezone:</label>
+                <select id="input-timezone">
+                    <option value="IST">IST (India)</option>
+                    <option value="GMT">GMT/UTC</option>
+                    <option value="PST">PST/PDT (Pacific)</option>
+                    <option value="EST">EST/EDT (Eastern)</option>
+                    <option value="CST">CST/CDT (Central)</option>
+                    <option value="JST">JST (Japan)</option>
+                    <option value="AEST">AEST/AEDT (Australia)</option>
+                    <option value="CST_CHINA">CST (Shanghai)</option>
+                    <option value="CET">CET/CEST (Europe)</option>
+                </select>
+            </div>
+            
+            <div class="input-row">
+                <label for="input-date">Date:</label>
+                <input type="date" id="input-date">
+            </div>
+            
+            <div class="input-row">
+                <label for="input-time">Time:</label>
+                <input type="time" id="input-time" step="1">
+            </div>
+            
+            <button id="convert-btn" class="convert-btn">Convert</button>
+
+            <!-- Conversion Results -->
+            <div id="conversion-results" style="display: none;">
+                <h3>Converted Times</h3>
+                <div class="conversion-result-grid"></div>
+
+                <div class="unix-timestamp-display">
+                    <button id="copy-timestamp" class="copy-btn"></button>
+                    <strong>Unix Timestamp:</strong> <span id="unix-timestamp">0</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

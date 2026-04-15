@@ -1,0 +1,251 @@
+/* Popup container */
+#tz-converter-popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Popup box */
+.tz-converter-popup {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 400px;
+    max-width: 500px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: tz-popup-slide-in 0.3s ease-out;
+}
+
+@keyframes tz-popup-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.tz-popup-header {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.tz-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.2s;
+}
+
+.tz-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Body */
+.tz-popup-body {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(90vh - 70px);
+    flex: 1;
+}
+
+/* Custom scrollbar */
+.tz-popup-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tz-popup-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.tz-popup-body::-webkit-scrollbar-thumb {
+    background: #434343;
+    border-radius: 10px;
+}
+
+.tz-popup-body::-webkit-scrollbar-thumb:hover {
+    background: #5568d3;
+}
+
+/* Info rows */
+.tz-info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 8px;
+}
+
+.tz-info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+}
+
+.tz-info-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: #434343;
+    font-family: 'Courier New', monospace;
+}
+
+/* Result section */
+.tz-result-section {
+    margin-top: 15px;
+    display: grid;
+    gap: 12px;
+}
+
+.tz-result-card {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #434343;
+}
+
+.tz-result-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.tz-result-time {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 4px;
+}
+
+.tz-result-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.tz-dst-badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 3px 8px;
+    background: #fff3cd;
+    color: #856404;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+/* Error popup */
+.tz-converter-popup.tz-error .tz-popup-header {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.tz-popup-body p {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.tz-help-text {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Quick Tooltip (IST & GMT only) */
+.tz-quick-tooltip {
+    position: absolute;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    animation: tz-tooltip-fade-in 0.2s ease-out;
+    border: 2px solid #434343;
+    cursor: pointer;
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
+}
+
+@keyframes tz-tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.tz-tooltip-content {
+    padding: 10px 14px;
+}
+
+.tz-tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    gap: 20px;
+}
+
+.tz-tooltip-row:not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tz-tooltip-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #434343;
+    white-space: nowrap;
+}
+
+.tz-tooltip-value {
+    font-size: 11px;
+    font-weight: 600;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+}
+
+.tz-quick-tooltip:hover {
+    box-shadow: 0 6px 20px rgba(67, 67, 67, 0.3);
+    transform: scale(1.02);
+    transition: all 0.2s;
+}
+

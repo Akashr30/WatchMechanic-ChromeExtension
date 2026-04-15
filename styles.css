@@ -1,0 +1,1115 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 400px;
+    min-height: 500px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background: white;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.settings-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.settings-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Section headings */
+section {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+}
+
+section h2 {
+    margin-bottom: 15px;
+    color: #434343;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Add spacing above "Current Time" heading (second h2 in the section) */
+.current-time-section h2:nth-of-type(2) {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+section h3 {
+    margin-bottom: 15px;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.section-desc {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+/* Current Time Display */
+.time-display-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.time-card {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    padding: 15px;
+    padding-top: 20px;
+    border-radius: 12px;
+    text-align: center;
+    border: none;
+    box-shadow: 0 4px 6px rgba(67, 67, 67, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: visible;
+}
+
+.time-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    border-radius: 12px;
+}
+
+.time-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(67, 67, 67, 0.3);
+}
+
+.time-card:hover .card-copy-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Primary timezone styling */
+.time-card.primary {
+    border: 2px solid #c0c0c0;
+    box-shadow: 0 4px 12px rgba(192, 192, 192, 0.4);
+}
+
+.time-card.primary:hover {
+    box-shadow: 0 6px 16px rgba(192, 192, 192, 0.5);
+}
+
+.primary-badge {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #e8e8e8 0%, #c0c0c0 100%);
+    color: #333;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* Dark Earth Tones - Natural & Sophisticated */
+.time-card.ist {
+    background: linear-gradient(135deg, #6b3d2e 0%, #45281e 100%);
+    box-shadow: 0 4px 6px rgba(107, 61, 46, 0.4);
+}
+
+.time-card.gmt {
+    background: linear-gradient(135deg, #2d4a3e 0%, #1a2d26 100%);
+    box-shadow: 0 4px 6px rgba(45, 74, 62, 0.4);
+}
+
+.time-card.pdt, .time-card.pst {
+    background: linear-gradient(135deg, #3d4a5c 0%, #262f3a 100%);
+    box-shadow: 0 4px 6px rgba(61, 74, 92, 0.4);
+}
+
+.time-card.est {
+    background: linear-gradient(135deg, #4a5c3d 0%, #2f3a28 100%);
+    box-shadow: 0 4px 6px rgba(74, 92, 61, 0.4);
+}
+
+.time-card.cst {
+    background: linear-gradient(135deg, #4a3d35 0%, #2f2822 100%);
+    box-shadow: 0 4px 6px rgba(74, 61, 53, 0.4);
+}
+
+.time-card.jst {
+    background: linear-gradient(135deg, #5c3d5c 0%, #3a283a 100%);
+    box-shadow: 0 4px 6px rgba(92, 61, 92, 0.4);
+}
+
+.time-card.aest {
+    background: linear-gradient(135deg, #2d4a5c 0%, #1a2f3a 100%);
+    box-shadow: 0 4px 6px rgba(45, 74, 92, 0.4);
+}
+
+.time-card.cst_china {
+    background: linear-gradient(135deg, #5c3d3d 0%, #3a2828 100%);
+    box-shadow: 0 4px 6px rgba(92, 61, 61, 0.4);
+}
+
+.time-card.cet {
+    background: linear-gradient(135deg, #3d3d5c 0%, #28283a 100%);
+    box-shadow: 0 4px 6px rgba(61, 61, 92, 0.4);
+}
+
+/* Custom timezone colors - Dark Earth variations */
+.time-card.custom-tz-1 {
+    background: linear-gradient(135deg, #5c4a3d 0%, #3a3028 100%);
+    box-shadow: 0 4px 6px rgba(92, 74, 61, 0.4);
+}
+
+.time-card.custom-tz-2 {
+    background: linear-gradient(135deg, #3d5c4a 0%, #283a30 100%);
+    box-shadow: 0 4px 6px rgba(61, 92, 74, 0.4);
+}
+
+.time-card.custom-tz-3 {
+    background: linear-gradient(135deg, #4a3d5c 0%, #30283a 100%);
+    box-shadow: 0 4px 6px rgba(74, 61, 92, 0.4);
+}
+
+.time-card.custom-tz-4 {
+    background: linear-gradient(135deg, #5c5c3d 0%, #3a3a28 100%);
+    box-shadow: 0 4px 6px rgba(92, 92, 61, 0.4);
+}
+
+.time-card.custom-tz-5 {
+    background: linear-gradient(135deg, #3d5c5c 0%, #283a3a 100%);
+    box-shadow: 0 4px 6px rgba(61, 92, 92, 0.4);
+}
+
+.timezone-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.time-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.date-value {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.dst-indicator {
+    font-size: 9px;
+    margin-top: 8px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    background: #e0e0e0;
+    color: #666;
+    font-weight: 600;
+}
+
+.dst-indicator.active {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* Copy button on time card */
+.card-copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    opacity: 1;
+    visibility: visible;
+    width: auto;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-copy-btn::before {
+    content: '📋';
+}
+
+.card-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-copy-btn:hover::after {
+    content: ' Copy';
+    font-size: 11px;
+    margin-left: 4px;
+    font-weight: 600;
+}
+
+.card-copy-btn:active {
+    transform: scale(0.95);
+}
+
+.card-copy-btn.copied {
+    animation: copyBounce 0.3s ease;
+}
+
+/* Epoch timestamp section */
+.epoch-display {
+    margin-top: 15px;
+    padding: 15px;
+    padding-top: 20px;
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(67, 67, 67, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.epoch-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+}
+
+.epoch-copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: auto;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.epoch-copy-btn::before {
+    content: '📋';
+}
+
+.epoch-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.epoch-copy-btn:hover::after {
+    content: ' Copy';
+    font-size: 11px;
+    margin-left: 4px;
+    font-weight: 600;
+}
+
+.epoch-copy-btn:active {
+    transform: scale(0.95);
+}
+
+.epoch-copy-btn.copied {
+    animation: copyBounce 0.3s ease;
+}
+
+.epoch-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.epoch-row:last-child {
+    margin-bottom: 0;
+}
+
+.epoch-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.epoch-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons */
+button, .copy-btn, #copy-live-epoch {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(67, 67, 67, 0.3);
+}
+
+button:hover, .copy-btn:hover, #copy-live-epoch:hover {
+    background: linear-gradient(135deg, #555555 0%, #333333 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(67, 67, 67, 0.4);
+}
+
+button:active, .copy-btn:active, #copy-live-epoch:active {
+    transform: scale(0.98);
+}
+
+/* Inputs */
+input[type="date"],
+input[type="time"],
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="text"]:focus,
+select:focus {
+    outline: none;
+    border-color: #434343;
+    box-shadow: 0 0 0 3px rgba(67, 67, 67, 0.1);
+}
+
+/* Timestamp mode toggle (sec/ms) */
+.timestamp-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Double-click toggle row */
+.dblclick-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+}
+
+.dblclick-toggle-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* Small toggle variant */
+.toggle-switch.small {
+    width: 36px;
+    height: 20px;
+}
+
+.toggle-switch.small .toggle-slider::before {
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+}
+
+.toggle-switch.small input:checked + .toggle-slider::before {
+    transform: translateX(16px);
+}
+
+.timestamp-mode-toggle .toggle-label {
+    font-size: 12px;
+    color: #666;
+    margin-right: 4px;
+}
+
+.toggle-switch-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-option {
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+    transition: color 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.toggle-option.active {
+    color: #434343;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ccc;
+    border-radius: 24px;
+    transition: background 0.3s;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: #434343;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+}
+
+/* Timestamp converter */
+.convert-ms-btn,
+.convert-sec-btn {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    color: white;
+}
+
+.convert-ms-btn:hover,
+.convert-sec-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.convert-ms-btn:active,
+.convert-sec-btn:active {
+    transform: translateY(0);
+}
+
+.timestamp-conversion-results {
+    margin-top: 20px;
+}
+
+.timestamp-details {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(67, 67, 67, 0.2);
+}
+
+.timestamp-details p {
+    margin: 8px 0;
+    color: #ffffff;
+    font-size: 13px;
+}
+
+.timestamp-details strong {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
+.timestamp-details span {
+    color: #ffffff;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+}
+
+.timestamp-info {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+}
+
+.info-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: #434343;
+    font-family: 'Courier New', monospace;
+}
+
+.timestamp-result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.timestamp-result-card {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    padding: 12px;
+    padding-top: 20px;
+    border-radius: 8px;
+    border: none;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(67, 67, 67, 0.2);
+    margin-bottom: 0;
+}
+
+.timestamp-result-card .result-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.timestamp-result-card .result-time {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.timestamp-result-card .result-date {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.timestamp-result-card .result-dst {
+    font-size: 9px;
+    margin-bottom: 8px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Earth tone colors for timestamp result cards */
+.timestamp-result-card.ist {
+    background: linear-gradient(135deg, #6b3d2e 0%, #45281e 100%);
+}
+.timestamp-result-card.gmt {
+    background: linear-gradient(135deg, #2d4a3e 0%, #1a2d26 100%);
+}
+.timestamp-result-card.pdt, .timestamp-result-card.pst {
+    background: linear-gradient(135deg, #3d4a5c 0%, #262f3a 100%);
+}
+.timestamp-result-card.est, .timestamp-result-card.edt {
+    background: linear-gradient(135deg, #4a5c3d 0%, #2f3a28 100%);
+}
+.timestamp-result-card.cst, .timestamp-result-card.cdt {
+    background: linear-gradient(135deg, #4a3d35 0%, #2f2822 100%);
+}
+.timestamp-result-card.jst {
+    background: linear-gradient(135deg, #5c3d5c 0%, #3a283a 100%);
+}
+.timestamp-result-card.aest, .timestamp-result-card.aedt {
+    background: linear-gradient(135deg, #2d4a5c 0%, #1a2f3a 100%);
+}
+.timestamp-result-card.cst_china {
+    background: linear-gradient(135deg, #5c3d3d 0%, #3a2828 100%);
+}
+.timestamp-result-card.cet, .timestamp-result-card.cest {
+    background: linear-gradient(135deg, #3d3d5c 0%, #28283a 100%);
+}
+.timestamp-result-card.custom-tz-1 {
+    background: linear-gradient(135deg, #5c4a3d 0%, #3a3028 100%);
+}
+.timestamp-result-card.custom-tz-2 {
+    background: linear-gradient(135deg, #3d5c4a 0%, #283a30 100%);
+}
+.timestamp-result-card.custom-tz-3 {
+    background: linear-gradient(135deg, #4a3d5c 0%, #30283a 100%);
+}
+.timestamp-result-card.custom-tz-4 {
+    background: linear-gradient(135deg, #5c5c3d 0%, #3a3a28 100%);
+}
+.timestamp-result-card.custom-tz-5 {
+    background: linear-gradient(135deg, #3d5c5c 0%, #283a3a 100%);
+}
+
+/* Copy button on timestamp result card */
+.timestamp-result-card .copy-result-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timestamp-result-card .copy-result-btn::before {
+    content: '📋';
+    font-size: 11px;
+}
+
+.timestamp-result-card .copy-result-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.timestamp-result-card .copy-result-btn:hover::after {
+    content: none;
+}
+
+.timestamp-result-card .copy-result-btn:active {
+    transform: scale(0.85);
+}
+
+.timestamp-result-card .copy-result-btn.copied {
+    animation: copyBounce 0.3s ease;
+}
+
+.result-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.result-time {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.result-date {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.result-dst {
+    font-size: 9px;
+    margin-bottom: 8px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.copy-result-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: auto;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.copy-result-btn::before {
+    content: '📋';
+}
+
+.copy-result-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.copy-result-btn:hover::after {
+    content: ' Copy';
+    font-size: 11px;
+    margin-left: 4px;
+    font-weight: 600;
+}
+
+.copy-result-btn:active {
+    transform: scale(0.95);
+}
+
+/* Copy success animation for general copy buttons */
+.copy-result-btn.copied {
+    animation: copyBounce 0.3s ease;
+}
+
+/* Conversion Result Grid */
+.conversion-result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+/* Time Zone Converter Result Cards */
+.result-card {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    padding: 12px;
+    padding-top: 20px;
+    border-radius: 8px;
+    border: none;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(67, 67, 67, 0.2);
+    margin-bottom: 0;
+}
+
+/* Apply same earth tone colors to result cards */
+.result-card.ist {
+    background: linear-gradient(135deg, #6b3d2e 0%, #45281e 100%);
+}
+.result-card.gmt {
+    background: linear-gradient(135deg, #2d4a3e 0%, #1a2d26 100%);
+}
+.result-card.pdt, .result-card.pst {
+    background: linear-gradient(135deg, #3d4a5c 0%, #262f3a 100%);
+}
+.result-card.est {
+    background: linear-gradient(135deg, #4a5c3d 0%, #2f3a28 100%);
+}
+.result-card.cst {
+    background: linear-gradient(135deg, #4a3d35 0%, #2f2822 100%);
+}
+.result-card.jst {
+    background: linear-gradient(135deg, #5c3d5c 0%, #3a283a 100%);
+}
+.result-card.aest {
+    background: linear-gradient(135deg, #2d4a5c 0%, #1a2f3a 100%);
+}
+.result-card.cst_china {
+    background: linear-gradient(135deg, #5c3d3d 0%, #3a2828 100%);
+}
+.result-card.cet {
+    background: linear-gradient(135deg, #3d3d5c 0%, #28283a 100%);
+}
+.result-card.custom-tz-1 {
+    background: linear-gradient(135deg, #5c4a3d 0%, #3a3028 100%);
+}
+.result-card.custom-tz-2 {
+    background: linear-gradient(135deg, #3d5c4a 0%, #283a30 100%);
+}
+.result-card.custom-tz-3 {
+    background: linear-gradient(135deg, #4a3d5c 0%, #30283a 100%);
+}
+.result-card.custom-tz-4 {
+    background: linear-gradient(135deg, #5c5c3d 0%, #3a3a28 100%);
+}
+.result-card.custom-tz-5 {
+    background: linear-gradient(135deg, #3d5c5c 0%, #283a3a 100%);
+}
+
+/* Copy button on result card */
+.result-card .copy-result-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-card .copy-result-btn::before {
+    content: '📋';
+    font-size: 11px;
+}
+
+.result-card .copy-result-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.result-card .copy-result-btn:hover::after {
+    content: none; /* Don't show "Copy" text for compact result cards */
+}
+
+.result-card .copy-result-btn:active {
+    transform: scale(0.85);
+}
+
+/* Copy success animation */
+.result-card .copy-result-btn.copied {
+    animation: copyBounce 0.3s ease;
+}
+
+@keyframes copyBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.result-card .result-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.result-card .result-time {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.result-card .result-date {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.result-card .result-dst {
+    font-size: 9px;
+    margin-bottom: 8px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Unix timestamp display at bottom */
+.unix-timestamp-display {
+    margin-top: 15px;
+    padding: 15px;
+    padding-top: 20px;
+    background: linear-gradient(135deg, #434343 0%, #000000 100%);
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(67, 67, 67, 0.2);
+    position: relative;
+    color: #ffffff;
+    text-align: center;
+}
+
+.unix-timestamp-display strong {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-right: 8px;
+}
+
+.unix-timestamp-display span {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+}
+
+#copy-timestamp {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: auto;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#copy-timestamp::before {
+    content: '📋';
+}
+
+#copy-timestamp:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#copy-timestamp:hover::after {
+    content: ' Copy';
+    font-size: 11px;
+    margin-left: 4px;
+    font-weight: 600;
+}
+
+#copy-timestamp:active {
+    transform: scale(0.95);
+}
