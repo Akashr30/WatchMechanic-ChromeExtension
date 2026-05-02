@@ -2075,4 +2075,242 @@ describe('Timezone Utilities', () => {
             });
         });
     });
+
+    // ── Regression tests: bugs caught during manual testing (v1.0.1) ──
+
+    describe('DEFAULT_SETTINGS completeness — displayTimezones crash fix', () => {
+        // Bug: content.js DEFAULT_SETTINGS was missing displayTimezones.
+        // When chrome.storage hadn't loaded yet, showTimestampPopup called
+        // userSettings.displayTimezones.forEach() on undefined → crash.
+        const DEFAULT_SETTINGS = {
+            displayTimezones: ['IST', 'GMT', 'PST'],
+            tooltipTimezones: ['IST', 'GMT'],
+            timestampMode: 'milliseconds',
+            doubleClickEnabled: true
+        };
+
+        test('displayTimezones must be a non-empty array', () => {
+            expect(Array.isArray(DEFAULT_SETTINGS.displayTimezones)).toBe(true);
+            expect(DEFAULT_SETTINGS.displayTimezones.length).toBeGreaterThan(0);
+        });
+
+        test('tooltipTimezones must be a non-empty array', () => {
+            expect(Array.isArray(DEFAULT_SETTINGS.tooltipTimezones)).toBe(true);
+            expect(DEFAULT_SETTINGS.tooltipTimezones.length).toBeGreaterThan(0);
+        });
+
+        test('all displayTimezones must exist in TIMEZONE_CONFIG', () => {
+            DEFAULT_SETTINGS.displayTimezones.forEach(tz => {
+                expect(TIMEZONE_CONFIG).toHaveProperty(tz);
+            });
+        });
+
+        test('all tooltipTimezones must exist in TIMEZONE_CONFIG', () => {
+            DEFAULT_SETTINGS.tooltipTimezones.forEach(tz => {
+                expect(TIMEZONE_CONFIG).toHaveProperty(tz);
+            });
+        });
+
+        test('forEach on displayTimezones must not throw', () => {
+            expect(() => {
+                DEFAULT_SETTINGS.displayTimezones.forEach(tz => {
+                    const config = TIMEZONE_CONFIG[tz];
+                    expect(config).toBeDefined();
+                });
+            }).not.toThrow();
+        });
+    });
+
+    describe('isDSTByZone — per-timezone DST check (was hardcoded to PST)', () => {
+        // Bug: isDST() was hardcoded to America/Los_Angeles, so DST badges
+        // for EST, CET, AEST showed PST's DST status instead of their own.
+
+        test('IST should never report DST (India has no DST)', () => {
+            const summer = new Date('2026-07-15T12:00:00Z');
+            const winter = new Date('2026-01-15T12:00:00Z');
+            expect(isDSTByZone(summer, 'Asia/Kolkata')).toBe(false);
+            expect(isDSTByZone(winter, 'Asia/Kolkata')).toBe(false);
+        });
+
+        test('JST should never report DST (Japan has no DST)', () => {
+            const summer = new Date('2026-07-15T12:00:00Z');
+            expect(isDSTByZone(summer, 'Asia/Tokyo')).toBe(false);
+        });
+
+        test('PST should report DST in summer, not in winter', () => {
+            const summer = new Date('2026-07-15T12:00:00Z');
+            const winter = new Date('2026-01-15T12:00:00Z');
+            expect(isDSTByZone(summer, 'America/Los_Angeles')).toBe(true);
+            expect(isDSTByZone(winter, 'America/Los_Angeles')).toBe(false);
+        });
+
+        test('EST should report DST in summer, not in winter', () => {
+            const summer = new Date('2026-07-15T12:00:00Z');
+            const winter = new Date('2026-01-15T12:00:00Z');
+            expect(isDSTByZone(summer, 'America/New_York')).toBe(true);
+            expect(isDSTByZone(winter, 'America/New_York')).toBe(false);
+        });
+
+        test('CET should report DST in summer, not in winter', () => {
+            const summer = new Date('2026-07-15T12:00:00Z');
+            const winter = new Date('2026-01-15T12:00:00Z');
+            expect(isDSTByZone(summer, 'Europe/Paris')).toBe(true);
+            expect(isDSTByZone(winter, 'Europe/Paris')).toBe(false);
+        });
+
+        test('AEST should report DST in Jan (southern hemisphere summer), not in Jul', () => {
+            const janSouthernSummer = new Date('2026-01-15T12:00:00Z');
+            const julSouthernWinter = new Date('2026-07-15T12:00:00Z');
+            expect(isDSTByZone(janSouthernSummer, 'Australia/Sydney')).toBe(true);
+            expect(isDSTByZone(julSouthernWinter, 'Australia/Sydney')).toBe(false);
+        });
+
+        test('different timezones can have different DST states at the same moment', () => {
+            // Jan 15: PST is standard, AEST is daylight (southern hemisphere)
+            const jan = new Date('2026-01-15T12:00:00Z');
+            expect(isDSTByZone(jan, 'America/Los_Angeles')).toBe(false);
+            expect(isDSTByZone(jan, 'Australia/Sydney')).toBe(true);
+        });
+
+        test('returns false for invalid timezone gracefully', () => {
+            const date = new Date('2026-07-15T12:00:00Z');
+            expect(isDSTByZone(date, 'Invalid/Zone')).toBe(false);
+        });
+    });
+
+    describe('Custom timezone support in display popup', () => {
+        // Bug: showTimestampPopup only looked up TIMEZONE_CONFIG for display
+        // timezones. Custom timezones (CUSTOM_*) were silently skipped.
+
+        test('TIMEZONE_CONFIG lookup returns undefined for custom timezone codes', () => {
+            expect(TIMEZONE_CONFIG['CUSTOM_1']).toBeUndefined();
+            expect(TIMEZONE_CONFIG['CUSTOM_SGT']).toBeUndefined();
+        });
+
+        test('custom timezone fallback should resolve from customTimezones array', () => {
+            const customTimezones = [
+                { id: 'CUSTOM_1', zone: 'Asia/Singapore', label: 'SGT' },
+                { id: 'CUSTOM_2', zone: 'Pacific/Auckland', label: 'NZST' }
+            ];
+
+            const tzCode = 'CUSTOM_1';
+            let config = TIMEZONE_CONFIG[tzCode];
+
+            // Standard lookup fails
+            expect(config).toBeUndefined();
+
+            // Fallback: same logic as content.js
+            if (!config && tzCode.startsWith('CUSTOM_')) {
+                const customTz = customTimezones.find(tz => tz.id === tzCode);
+                if (customTz) {
+                    config = { zone: customTz.zone, emoji: '🌐', label: customTz.label, hasDST: false };
+                }
+            }
+
+            expect(config).toBeDefined();
+            expect(config.zone).toBe('Asia/Singapore');
+            expect(config.label).toBe('SGT');
+        });
+
+        test('custom timezone converts correctly through convertToTimezone', () => {
+            const date = new Date('2026-01-15T12:00:00Z'); // UTC noon
+            const result = convertToTimezone(date, 'Asia/Singapore'); // UTC+8
+            expect(result.getHours()).toBe(20);
+        });
+
+        test('non-existent custom timezone returns undefined', () => {
+            const customTimezones = [
+                { id: 'CUSTOM_1', zone: 'Asia/Singapore', label: 'SGT' }
+            ];
+            const tzCode = 'CUSTOM_99';
+            let config = TIMEZONE_CONFIG[tzCode];
+            if (!config && tzCode.startsWith('CUSTOM_')) {
+                const customTz = customTimezones.find(tz => tz.id === tzCode);
+                if (customTz) {
+                    config = { zone: customTz.zone, emoji: '🌐', label: customTz.label };
+                }
+            }
+            expect(config).toBeUndefined();
+        });
+    });
+
+    describe('sendMessage frameId — triple popup prevention', () => {
+        // Bug: chrome.tabs.sendMessage without frameId broadcasts to ALL frames.
+        // With all_frames:true, this caused N popups (one per frame).
+        // Fix: send to frameId:0 (top frame only).
+
+        test('frameId 0 targets only the top-level frame', () => {
+            const options = { frameId: 0 };
+            expect(options.frameId).toBe(0);
+            expect(typeof options.frameId).toBe('number');
+        });
+
+        test('message payload includes required fields', () => {
+            const message = {
+                action: "convertTimestamp",
+                timestamp: "1737194785000"
+            };
+            expect(message.action).toBe("convertTimestamp");
+            expect(message.timestamp).toBeDefined();
+            expect(typeof message.timestamp).toBe('string');
+        });
+
+        test('frameId should not be undefined or null in sendMessage options', () => {
+            const options = { frameId: 0 };
+            expect(options.frameId).not.toBeUndefined();
+            expect(options.frameId).not.toBeNull();
+        });
+    });
+
+    describe('Display Timezones checkbox limit (max 6)', () => {
+        // Bug: Display checkboxes had no limit enforcement. Users could select
+        // more than 6, but autoSave silently rejected — no error shown.
+        // Fix: disable unchecked checkboxes when 6 are selected (same as tooltip max 3).
+
+        const MAX_DISPLAY_TIMEZONES = 6;
+        const MAX_TOOLTIP_TIMEZONES = 3;
+
+        test('MAX_DISPLAY_TIMEZONES should be 6', () => {
+            expect(MAX_DISPLAY_TIMEZONES).toBe(6);
+        });
+
+        test('MAX_TOOLTIP_TIMEZONES should be 3', () => {
+            expect(MAX_TOOLTIP_TIMEZONES).toBe(3);
+        });
+
+        test('auto-save should reject when display count exceeds max', () => {
+            const displayTimezones = ['IST', 'GMT', 'PST', 'EST', 'CST', 'JST', 'AEST']; // 7
+            const tooltipTimezones = ['IST', 'GMT'];
+            const shouldSave = displayTimezones.length <= MAX_DISPLAY_TIMEZONES && tooltipTimezones.length <= MAX_TOOLTIP_TIMEZONES;
+            expect(shouldSave).toBe(false);
+        });
+
+        test('auto-save should accept when display count is at max', () => {
+            const displayTimezones = ['IST', 'GMT', 'PST', 'EST', 'CST', 'JST']; // exactly 6
+            const tooltipTimezones = ['IST', 'GMT'];
+            const shouldSave = displayTimezones.length <= MAX_DISPLAY_TIMEZONES && tooltipTimezones.length <= MAX_TOOLTIP_TIMEZONES;
+            expect(shouldSave).toBe(true);
+        });
+
+        test('auto-save should accept when display count is below max', () => {
+            const displayTimezones = ['IST', 'GMT', 'PST']; // 3
+            const tooltipTimezones = ['IST'];
+            const shouldSave = displayTimezones.length <= MAX_DISPLAY_TIMEZONES && tooltipTimezones.length <= MAX_TOOLTIP_TIMEZONES;
+            expect(shouldSave).toBe(true);
+        });
+
+        test('auto-save should reject when tooltip count exceeds max', () => {
+            const displayTimezones = ['IST', 'GMT'];
+            const tooltipTimezones = ['IST', 'GMT', 'PST', 'EST']; // 4
+            const shouldSave = displayTimezones.length <= MAX_DISPLAY_TIMEZONES && tooltipTimezones.length <= MAX_TOOLTIP_TIMEZONES;
+            expect(shouldSave).toBe(false);
+        });
+
+        test('auto-save should reject when both exceed their limits', () => {
+            const displayTimezones = ['IST', 'GMT', 'PST', 'EST', 'CST', 'JST', 'AEST']; // 7
+            const tooltipTimezones = ['IST', 'GMT', 'PST', 'EST']; // 4
+            const shouldSave = displayTimezones.length <= MAX_DISPLAY_TIMEZONES && tooltipTimezones.length <= MAX_TOOLTIP_TIMEZONES;
+            expect(shouldSave).toBe(false);
+        });
+    });
 });

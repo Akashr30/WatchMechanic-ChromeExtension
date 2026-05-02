@@ -14,10 +14,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === "convertTimestamp") {
         const selectedText = info.selectionText.trim();
         
-        // Send message to content script to show popup
+        // Send message to content script in the top frame only (avoid duplicates with all_frames)
         chrome.tabs.sendMessage(tab.id, {
             action: "convertTimestamp",
             timestamp: selectedText
+        }, { frameId: 0 }).catch(() => {
+            // Content script not loaded on this page — silently ignore
         });
     }
 });

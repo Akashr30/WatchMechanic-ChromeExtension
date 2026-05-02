@@ -15,6 +15,7 @@ const TIMEZONE_CONFIG = {
 
 // Default settings
 const DEFAULT_SETTINGS = {
+    displayTimezones: ['IST', 'GMT', 'PST'],
     tooltipTimezones: ['IST', 'GMT'],
     timestampMode: 'milliseconds',
     doubleClickEnabled: true
@@ -48,11 +49,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 let currentTooltip = null;
 
 // Add double-click listener to detect timestamps
+// Use capture phase so we fire BEFORE the page can stopPropagation()
 document.addEventListener('dblclick', function(e) {
     // Skip if double-click conversion is disabled
     if (userSettings.doubleClickEnabled === false) return;
 
     let selectedText = window.getSelection().toString().trim();
+
+    // Fallback: if page blocks text selection (user-select: none), extract
+    // the number directly from the text node at the click position.
+    if (!selectedText) {
+        selectedText = getWordAtPoint(e.clientX, e.clientY);
+    }
+
     if (!selectedText) return;
 
     // Check if the character immediately before the selection is a minus sign.
@@ -94,7 +103,7 @@ document.addEventListener('dblclick', function(e) {
         e.preventDefault();
         showQuickTooltip(selectedText, e.pageX, e.pageY);
     }
-});
+}, true); // capture phase — fires before the page's own handlers
 
 // Show quick tooltip (IST and GMT only)
 function showQuickTooltip(timestampStr, x, y) {
@@ -225,6 +234,28 @@ function showQuickTooltip(timestampStr, x, y) {
     });
 }
 
+// Extract the numeric "word" at a given screen coordinate.
+// Used as a fallback when user-select:none prevents normal text selection.
+function getWordAtPoint(x, y) {
+    const range = document.caretRangeFromPoint(x, y);
+    if (!range || range.startContainer.nodeType !== Node.TEXT_NODE) return null;
+
+    const text = range.startContainer.textContent;
+    const offset = range.startOffset;
+
+    // Walk left and right to find the boundaries of a numeric token (with optional leading minus)
+    let start = offset;
+    let end = offset;
+
+    while (end < text.length && /\d/.test(text[end])) end++;
+    while (start > 0 && /\d/.test(text[start - 1])) start--;
+    // Include leading minus
+    if (start > 0 && /[-\u2212\u2013]/.test(text[start - 1])) start--;
+
+    const word = text.slice(start, end).trim();
+    return word.length > 0 ? word : null;
+}
+
 // Get the character immediately before the current selection.
 // Walks back through text nodes and sibling elements to find it.
 function getCharBeforeSelection() {
@@ -348,11 +379,11 @@ function formatDate(date) {
     });
 }
 
-// Check if DST
-function isDST(date) {
+// Check if DST for a specific timezone
+function isDSTByZone(date, zone) {
     try {
         const formatted = new Intl.DateTimeFormat('en-US', {
-            timeZone: 'America/Los_Angeles',
+            timeZone: zone,
             timeZoneName: 'short'
         }).format(date);
         
@@ -367,7 +398,7 @@ function showTimestampPopup(timestampStr) {
     const detected = detectTimestampFormat(timestampStr);
     
     if (!detected) {
-        showErrorPopup('Invalid timestamp format. Please select a 10-digit (seconds) or 13-digit (milliseconds) number.');
+        showErrorPopup('Invalid input. Please select a numeric timestamp (positive or negative).');
         return;
     }
     
@@ -381,11 +412,20 @@ function showTimestampPopup(timestampStr) {
     // Build timezone cards based on user's display settings
     let timezoneCards = '';
     userSettings.displayTimezones.forEach(tzCode => {
-        const config = TIMEZONE_CONFIG[tzCode];
+        let config = TIMEZONE_CONFIG[tzCode];
+        
+        // Check if it's a custom timezone
+        if (!config && tzCode.startsWith('CUSTOM_')) {
+            const customTz = (userSettings.customTimezones || []).find(tz => tz.id === tzCode);
+            if (customTz) {
+                config = { zone: customTz.zone, emoji: '🌐', label: customTz.label, hasDST: false };
+            }
+        }
+        
         if (!config) return;
         
         const time = convertToTimezone(date, config.zone);
-        const isDSTActive = config.hasDST && isDST(date);
+        const isDSTActive = config.hasDST && isDSTByZone(date, config.zone);
         
         timezoneCards += `
             <div class="tz-result-card">
@@ -462,9 +502,10 @@ function showErrorPopup(message) {
             <div class="tz-popup-body">
                 <p>${message}</p>
                 <div class="tz-help-text">
-                    Valid formats:<br>
-                    • 10 digits (seconds): 1737194785<br>
-                    • 13 digits (milliseconds): 1737194785432
+                    Valid input: any numeric timestamp<br>
+                    • Seconds: 1737194785<br>
+                    • Milliseconds: 1737194785432<br>
+                    • Negative (pre-1970): -86400000
                 </div>
             </div>
         </div>

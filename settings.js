@@ -11,11 +11,13 @@ const DEFAULT_SETTINGS = {
     doubleClickEnabled: true // Enable/disable double-click timestamp conversion on pages
 };
 
+const MAX_DISPLAY_TIMEZONES = 6;
 const MAX_TOOLTIP_TIMEZONES = 3;
 
 // Load settings when page opens
 document.addEventListener('DOMContentLoaded', () => {
     loadSettings();
+    setupDisplayCheckboxLimit();
     setupTooltipCheckboxLimit();
     setupCustomTimezoneHandlers();
     setupCopyFormatHandler();
@@ -195,6 +197,10 @@ function addCustomTimezoneToSections(tzId, zone, label) {
             <label for="display-${idLower}">🌐 ${label}</label>
         `;
         displayGrid.appendChild(div);
+        
+        // Re-setup limit listeners
+        div.querySelector('input').addEventListener('change', updateDisplayCheckboxStates);
+        updateDisplayCheckboxStates();
     }
     
     // Add to Tooltip Timezones section
@@ -222,7 +228,38 @@ function removeCustomTimezoneFromSections(tzId) {
         el.closest('.primary-option, .timezone-checkbox')?.remove();
     });
     
+    updateDisplayCheckboxStates();
     updateTooltipCheckboxStates();
+}
+
+// Setup display checkbox limit (max 6)
+function setupDisplayCheckboxLimit() {
+    const displayCheckboxes = document.querySelectorAll('[id^="display-"]');
+    
+    displayCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            updateDisplayCheckboxStates();
+        });
+    });
+    
+    // Initial state check
+    updateDisplayCheckboxStates();
+}
+
+// Update display checkbox states - disable unchecked ones when 6 are selected
+function updateDisplayCheckboxStates() {
+    const displayCheckboxes = document.querySelectorAll('[id^="display-"]');
+    const checkedCount = document.querySelectorAll('[id^="display-"]:checked').length;
+    
+    displayCheckboxes.forEach(checkbox => {
+        if (checkedCount >= MAX_DISPLAY_TIMEZONES && !checkbox.checked) {
+            checkbox.disabled = true;
+            checkbox.parentElement.classList.add('disabled');
+        } else {
+            checkbox.disabled = false;
+            checkbox.parentElement.classList.remove('disabled');
+        }
+    });
 }
 
 // Setup tooltip checkbox limit (max 3)
@@ -281,7 +318,7 @@ function autoSave() {
 
     // Validate silently — don't save invalid states
     if (displayTimezones.length === 0 || tooltipTimezones.length === 0) return;
-    if (displayTimezones.length > 6 || tooltipTimezones.length > MAX_TOOLTIP_TIMEZONES) return;
+    if (displayTimezones.length > MAX_DISPLAY_TIMEZONES || tooltipTimezones.length > MAX_TOOLTIP_TIMEZONES) return;
 
     chrome.storage.sync.get('timezoneSettings', (data) => {
         const existingSettings = data.timezoneSettings || DEFAULT_SETTINGS;
@@ -368,7 +405,8 @@ function loadSettings() {
             }
         });
         
-        // Update tooltip checkbox states after loading
+        // Update checkbox states after loading
+        updateDisplayCheckboxStates();
         updateTooltipCheckboxStates();
         
         // Set copy date format dropdown

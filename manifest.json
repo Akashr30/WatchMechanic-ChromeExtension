@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "WatchMechanic - TimeZone Converter",
-  "version": "1.0.0",
-  "description": "Convert and display IST, GMT, and PDT times with daylight savings support",
+  "version": "1.0.1",
+  "description": "Double-click any Unix timestamp on any webpage to instantly convert it across 10+ timezones",
   "permissions": ["contextMenus", "storage"],
   "icons": {
     "16": "icons/icon16.png",
@@ -27,6 +27,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
+      "all_frames": true,
+      "match_origin_as_fallback": true,
       "css": ["content.css"]
     }
   ]
